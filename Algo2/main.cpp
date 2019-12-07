@@ -29,12 +29,9 @@ Node *uncle() {
 
 	if (parent == NULL or parent->parent == NULL)
 	return NULL;
-
 	if (parent->isOnLeft())
-
 	return parent->parent->right;
 	else
-
 	return parent->parent->left;
 }
 
@@ -218,7 +215,6 @@ void deleteNode(Node *v) {
 	} else {
 		if (uvBlack) {
 
-
 		fixDoubleBlack(v);
 		} else {
 
@@ -265,11 +261,10 @@ void deleteNode(Node *v) {
 	return;
 	}
 
-
 	swapValues(u, v);
+
 	deleteNode(u);
 }
-
 void fixDoubleBlack(Node *x) {
 	if (x == root)
 
@@ -367,8 +362,20 @@ void inorder(Node *x) {
 	if (x == NULL)
 	return;
 	inorder(x->left);
-	cout <<"[" <<x->i->low <<","<<x->i->high<<"]" <<"-->"<<x->color<<endl;
+	/*if(x->left && x->left->max >x->right->max ) {if(x->i->high < x->left->max) x->max = x->left->max;} //else x->max = x->left->i->high;}
+	if(x->right && x->right->max >x->left->max){if(x->i->high < x->right->max) x->max = x->right->max;} //else x->max = x->right->i->high;}
+	if(!(x->left) && !(x->right)){x->max = x->i->high;}*/
+	cout <<"[" <<x->i->low <<","<<x->i->high<<"]" <<"-->"<<x->color <<" "<<x->max<<endl;
 	inorder(x->right);
+}
+void updateMax(Node*x){
+    if (x == NULL)
+    return;
+    updateMax(x->left);
+    updateMax(x->right);
+    if(x->left && x->left->max >x->right->max ) {if(x->i->high < x->left->max) x->max = x->left->max;} //else x->max = x->left->i->high;}
+	if(x->right && x->right->max >x->left->max){if(x->i->high < x->right->max) x->max = x->right->max;} //else x->max = x->right->i->high;}
+	if(!(x->left) && !(x->right)){x->max = x->i->high;}
 }
 
 public:
@@ -425,8 +432,8 @@ void insert(interval i) {
 	if (root->max < i.high)
         root->max = i.high;
 	fixRedRed(newNode);
-	if (root->max < i.high)
-        root->max = i.high;
+	if (temp->max < i.high)
+        temp->max = i.high;
 	}
 }
 
@@ -455,6 +462,7 @@ void printInOrder() {
 	inorder(root);
 	cout << endl;
 }
+
 
 // prints level order of the tree
 void printLevelOrder() {
@@ -525,10 +533,10 @@ interval x = {6, 7};
         cout << "\nOverlaps with [" << res->low << ", " << res->high << "]";
         cout<<endl;
 
-tree.deleteByVal(ints[1]);
-
-
+tree.deleteByVal(ints[5]);
+tree.updateMax(root);
 tree.printInOrder();
 tree.printLevelOrder();
+
 return 0;
 }
